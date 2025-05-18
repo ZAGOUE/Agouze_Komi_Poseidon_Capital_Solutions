@@ -1,0 +1,10 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+### Test de connexion (login)
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=noel&password=Password123!

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Connexion</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4" style="min-width: 350px;">
+        <h2 class="text-center mb-4">Se connecter</h2>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            Identifiants invalides. Veuillez réessayer.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            Déconnexion réussie.
+        </div>
+        <div th:if="${param.created}" class="alert alert-success">
+            Compte créé avec succès. Veuillez vous connecter.
+        </div>
+
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group mb-3">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" class="form-control" id="username" name="username" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="password">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Connexion</button>
+        </form>
+        <div class="mt-3 text-center">
+            <small>Pas de compte ? <a th:href="@{/user/add}">Créez-en un</a></small>
+        </div>
+    </div>
+</div>
+</body>
+</html>
