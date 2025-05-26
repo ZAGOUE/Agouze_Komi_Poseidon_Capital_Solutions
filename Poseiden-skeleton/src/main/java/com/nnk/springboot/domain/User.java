@@ -1,18 +1,31 @@
 package com.nnk.springboot.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "users")
+
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
     @NotBlank(message = "Username is mandatory")
+    @Size(min = 3, max = 30)
     private String username;
+
     @NotBlank(message = "Password is mandatory")
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
+            message = "Password must be at least 8 characters, contain 1 uppercase, 1 number and 1 special character"
+    )
     private String password;
+
     @NotBlank(message = "FullName is mandatory")
     private String fullname;
     @NotBlank(message = "Role is mandatory")

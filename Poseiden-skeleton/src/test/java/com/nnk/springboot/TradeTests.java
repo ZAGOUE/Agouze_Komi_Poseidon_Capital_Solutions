@@ -21,12 +21,20 @@ public class TradeTests {
 
 	@Test
 	public void tradeTest() {
-		Trade trade = new Trade("Trade Account", "Type");
+		Trade trade = new Trade();
+		trade.setBuyQuantity(100.0);
+		trade.setSellQuantity(150.0);
+		trade.setAccount("TestAccount");
+		trade.setType("TestType");
+		trade.setBuyPrice(10.5);
+		trade.setSellPrice(12.5);
 
 		// Save
-		trade = tradeRepository.save(trade);
-		Assert.assertNotNull(trade.getTradeId());
-		Assert.assertTrue(trade.getAccount().equals("Trade Account"));
+		Trade saved = tradeRepository.save(trade);
+
+		Assert.assertNotNull(saved.getTradeId());
+		Assert.assertEquals(100.0, saved.getBuyQuantity(), 0.01);
+		Assert.assertEquals(150.0, saved.getSellQuantity(), 0.01);
 
 		// Update
 		trade.setAccount("Trade Account Update");

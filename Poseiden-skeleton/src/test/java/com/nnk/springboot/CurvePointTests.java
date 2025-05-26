@@ -21,12 +21,17 @@ public class CurvePointTests {
 
 	@Test
 	public void curvePointTest() {
-		CurvePoint curvePoint = new CurvePoint(10, 10d, 30d);
+		CurvePoint curvePoint = new CurvePoint();
+		curvePoint.setCurveId(10);
+		curvePoint.setTerm(1.5);
+		curvePoint.setValue(100.0);
+
 
 		// Save
 		curvePoint = curvePointRepository.save(curvePoint);
 		Assert.assertNotNull(curvePoint.getId());
-		Assert.assertTrue(curvePoint.getCurveId() == 10);
+		Assert.assertEquals(Integer.valueOf(10), curvePoint.getCurveId());
+
 
 		// Update
 		curvePoint.setCurveId(20);

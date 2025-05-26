@@ -1,0 +1,24 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+### Test login admin
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=Admin2024!
+### Test accès après login
+GET http://localhost:8080/bidList/list
+Cookie: JSESSIONID=A19305A615777F2B06A9796DFB63A81D
+
+### Enregistrement d’un admin
+POST http://localhost:8080/api/users/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin2024!",
+  "fullname": "Administrator",
+  "role": "ROLE_ADMIN"
+}
