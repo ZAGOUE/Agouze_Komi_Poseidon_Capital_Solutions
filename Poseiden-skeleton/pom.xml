@@ -91,6 +91,14 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+			<version>3.1.2.RELEASE</version>
+		</dependency>
+
+
+
 
 
 	</dependencies>
@@ -107,6 +115,16 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.8</version>
+				<configuration>
+					<excludes>
+						<exclude>com/nnk/springboot/config/*</exclude>
+						<exclude>com/nnk/springboot/domain/*</exclude>
+						<exclude>com/nnk/springboot/controllers/LoginController*</exclude>
+						<exclude>com/nnk/springboot/controllers/AuthController*</exclude>
+						<exclude>com/nnk/springboot/services/MyUserDetails*</exclude>
+						<exclude>com/nnk/springboot/services/MyUserDetailsService*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>

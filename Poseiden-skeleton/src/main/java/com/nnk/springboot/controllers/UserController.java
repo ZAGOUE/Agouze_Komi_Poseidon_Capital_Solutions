@@ -8,14 +8,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -26,13 +25,23 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping("/user/list")
-    public String home(Model model, Principal principal)
-    {
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("username", principal.getName()); // ← important
+    @GetMapping("/user/list")
+    public String listUsers(Model model, Principal principal) {
+        String username = principal.getName();
+        User connectedUser = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (connectedUser.getRole().equals("ROLE_ADMIN")) {
+            model.addAttribute("users", userService.findAll());
+        } else {
+            model.addAttribute("users", List.of(connectedUser));
+        }
+
+        model.addAttribute("username", username);
         return "user/list";
     }
+
+
 
     @GetMapping("/user/add")
     public String addUser(Model model) {
@@ -60,6 +69,47 @@ public class UserController {
             return "redirect:/user/list";
 
     }
+    @GetMapping("/user/change-password/{id}")
+    public String showChangePasswordForm(@PathVariable("id") Integer id, Model model, Principal principal) {
+        User user = userService.findById(id);
+
+        // Vérifie que c'est bien l'utilisateur connecté
+        if (!user.getUsername().equals(principal.getName())) {
+            return "redirect:/access-denied";
+        }
+
+        model.addAttribute("user", user);
+        return "user/change-password";
+    }
+
+    @PostMapping("/user/change-password/{id}")
+    public String changePassword(@PathVariable("id") Integer id,
+                                 @RequestParam("oldPassword") String oldPassword,
+                                 @RequestParam("password") String newPassword,
+                                 Principal principal,
+                                 RedirectAttributes redirectAttributes) {
+
+        User user = userService.findById(id);
+        if (!user.getUsername().equals(principal.getName())) {
+            return "redirect:/access-denied";
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        // ❌ Mauvais mot de passe actuel → erreur
+        if (!encoder.matches(oldPassword, user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Current password is incorrect.");
+            return "redirect:/user/change-password/" + id;
+        }
+
+        // ✅ OK → changement du mot de passe
+        user.setPassword(encoder.encode(newPassword));
+        userService.update(user);
+        return "redirect:/user/change-password/" + id + "?success";
+    }
+
+
+
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -73,20 +123,43 @@ public class UserController {
 
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
-                             BindingResult result, Model model) {
+                             BindingResult result, Model model,
+                             Principal principal) {
+
+        // Empêche un USER de modifier un autre compte
+        User connectedUser = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!connectedUser.getRole().equals("ROLE_ADMIN") && !connectedUser.getId().equals(id)) {
+            return "redirect:/access-denied";
+        }
+
         if (result.hasErrors()) {
             return "user/update";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+        // Conserver les infos de l'utilisateur existant
+        User existingUser = userService.findById(id);
         user.setId(id);
 
-        userRepository.save(user);
+        // On ne laisse pas le rôle être modifié dans le formulaire
+        user.setRole(existingUser.getRole());
 
-        model.addAttribute("users", userRepository.findAll());
+        // Conserver le fullname s’il est en readonly (non modifiable)
+        user.setFullname(existingUser.getFullname());
+
+        // Sécuriser le mot de passe : conserver si vide
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            user.setPassword(existingUser.getPassword());
+        } else {
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        }
+
+        // Sauvegarde finale
+        userRepository.save(user);
         return "redirect:/user/list";
     }
+
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {

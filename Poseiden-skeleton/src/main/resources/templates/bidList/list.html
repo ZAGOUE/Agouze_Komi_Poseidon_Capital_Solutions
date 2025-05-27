@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
 	<meta charset="utf-8"/>
 	<title>Bid List Screen</title>
@@ -25,6 +27,7 @@
 				<a href="/rating/list">Ratings</a>
 				<a href="/trade/list">Trade</a>
 				<a href="/ruleName/list">Rule</a>
+				<a href="/user/list">Users</a>
 			</nav>
 		</div>
 		<div class="user-block">
@@ -40,7 +43,8 @@
 	<div class="row mb-3">
 		<div class="col">
 			<h4 class="section-label">Bid List</h4>
-			<a href="/bidList/add" class="btn btn-primary btn-sm">Add New</a>
+			<a href="/bidList/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
+
 		</div>
 	</div>
 
@@ -52,7 +56,7 @@
 			<th>Account</th>
 			<th>Type</th>
 			<th>Bid Quantity</th>
-			<th>Action</th>
+			<th sec:authorize="hasRole('ADMIN')">Action</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -61,7 +65,7 @@
 			<td th:text="${bidList.account}"></td>
 			<td th:text="${bidList.type}"></td>
 			<td th:text="${bidList.bidQuantity}"></td>
-			<td class="text-right action-links">
+			<td class="text-right action-links" sec:authorize="hasRole('ADMIN')">
 				<a th:href="@{/bidList/update/{id}(id=${bidList.bidListId})}">Edit</a> |
 				<a th:href="@{/bidList/delete/{id}(id=${bidList.bidListId})}">Delete</a>
 			</td>

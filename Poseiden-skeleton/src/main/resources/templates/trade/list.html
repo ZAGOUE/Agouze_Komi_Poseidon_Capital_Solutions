@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="utf-8"/>
 	<title>Trade List</title>
@@ -23,19 +24,23 @@
 			<a href="/rating/list">Ratings</a>
 			<a href="/trade/list">Trade</a>
 			<a href="/ruleName/list">Rule</a>
+			<a href="/user/list">Users</a>
 		</nav>
 		<div class="user-block">
-			<p class="user-label">Logged in user: <b th:text="${username}">admin</b></p>
+			<p class="user-label">
+				Logged in user: <b th:text="${username}">admin</b><br/>
+
+			</p>
 			<form th:action="@{/logout}" method="POST">
 				<input type="submit" value="Logout" class="btn btn-sm btn-outline-secondary"/>
 			</form>
 		</div>
 	</div>
 
-	<!-- ✅ Section + bouton -->
+	<!-- ✅ Section + bouton réservé aux ADMIN -->
 	<div class="mb-3">
 		<h4 class="section-label">Trade List</h4>
-		<a href="/trade/add" class="btn btn-primary btn-sm">Add New</a>
+		<a href="/trade/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
 	</div>
 
 	<!-- ✅ Tableau stylisé -->
@@ -46,7 +51,7 @@
 			<th>Account</th>
 			<th>Type</th>
 			<th>Buy Quantity</th>
-			<th>Action</th>
+			<th sec:authorize="hasRole('ADMIN')">Action</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -55,7 +60,7 @@
 			<td th:text="${trade.account}"></td>
 			<td th:text="${trade.type}"></td>
 			<td th:text="${trade.buyQuantity}"></td>
-			<td class="text-right action-links">
+			<td class="text-right action-links" sec:authorize="hasRole('ADMIN')">
 				<a th:href="@{/trade/update/{id}(id=${trade.tradeId})}">Edit</a> |
 				<a th:href="@{/trade/delete/{id}(id=${trade.tradeId})}">Delete</a>
 			</td>

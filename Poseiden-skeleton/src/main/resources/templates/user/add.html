@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
 	<title>Add User</title>
@@ -40,19 +40,32 @@
 			<p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 		</div>
 
-		<!-- Role -->
+		<!-- Bloc Rôle -->
 		<div class="mb-4">
 			<label class="form-label d-block">Role</label>
-			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="radio" th:field="*{role}" th:value="ADMIN" id="roleAdmin">
-				<label class="form-check-label" for="roleAdmin">Admin</label>
+
+			<!-- ✅ Choix visible uniquement pour ROLE_ADMIN -->
+			<div sec:authorize="hasRole('ADMIN')">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{role}" th:value="ROLE_ADMIN" id="roleAdmin">
+					<label class="form-check-label" for="roleAdmin">Admin</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{role}" th:value="ROLE_USER" id="roleUser">
+					<label class="form-check-label" for="roleUser">User</label>
+				</div>
 			</div>
-			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="radio" th:field="*{role}" th:value="USER" id="roleUser">
-				<label class="form-check-label" for="roleUser">User</label>
+
+			<!-- ✅ Utilisateur simple ou non connecté → rôle forcé -->
+			<div sec:authorize="!hasRole('ADMIN')">
+				<input type="hidden" th:field="*{role}" value="ROLE_USER" />
+				<p class="text-muted"><em>Rôle attribué : Utilisateur standard</em></p>
 			</div>
+
+			<!-- ✅ Message d’erreur -->
 			<p class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></p>
 		</div>
+
 
 		<!-- ✅ Boutons -->
 		<div class="d-flex gap-2">
