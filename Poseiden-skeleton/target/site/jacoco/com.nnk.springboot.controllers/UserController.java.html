@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import com.nnk.springboot.domain.User;
+import com.nnk.springboot.repositories.UserRepository;
+import com.nnk.springboot.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
+import java.util.List;
+
+@Controller
+<span class="fc" id="L20">public class UserController {</span>
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+
+    @GetMapping(&quot;/user/list&quot;)
+    public String listUsers(Model model, Principal principal) {
+<span class="fc" id="L30">        String username = principal.getName();</span>
+<span class="fc" id="L31">        User connectedUser = userService.findByUsername(username)</span>
+<span class="fc" id="L32">                .orElseThrow(() -&gt; new RuntimeException(&quot;Utilisateur non trouvé&quot;));</span>
+
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (connectedUser.getRole().equals(&quot;ROLE_ADMIN&quot;)) {</span>
+<span class="fc" id="L35">            model.addAttribute(&quot;users&quot;, userService.findAll());</span>
+        } else {
+<span class="nc" id="L37">            model.addAttribute(&quot;users&quot;, List.of(connectedUser));</span>
+        }
+
+<span class="fc" id="L40">        model.addAttribute(&quot;username&quot;, username);</span>
+<span class="fc" id="L41">        return &quot;user/list&quot;;</span>
+    }
+
+
+
+    @GetMapping(&quot;/user/add&quot;)
+    public String addUser(Model model) {
+<span class="fc" id="L48">        model.addAttribute(&quot;user&quot;, new User());</span>
+<span class="fc" id="L49">        return &quot;user/add&quot;;</span>
+    }
+
+
+    @PostMapping(&quot;/user/validate&quot;)
+    public String validate(@Valid User user, BindingResult result, Model model) {
+<span class="nc" id="L55">        System.out.println(&quot;Mot de passe brut reçu : &quot; + user.getPassword());</span>
+
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (result.hasErrors()) {</span>
+
+<span class="nc" id="L60">        return &quot;user/add&quot;;</span>
+        }
+
+<span class="nc" id="L63">            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+<span class="nc" id="L64">            user.setPassword(encoder.encode(user.getPassword()));</span>
+
+<span class="nc" id="L66">            userRepository.save(user);</span>
+
+<span class="nc" id="L68">            model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
+<span class="nc" id="L69">            return &quot;redirect:/user/list&quot;;</span>
+
+    }
+    @GetMapping(&quot;/user/change-password/{id}&quot;)
+    public String showChangePasswordForm(@PathVariable(&quot;id&quot;) Integer id, Model model, Principal principal) {
+<span class="fc" id="L74">        User user = userService.findById(id);</span>
+
+        // Vérifie que c'est bien l'utilisateur connecté
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (!user.getUsername().equals(principal.getName())) {</span>
+<span class="nc" id="L78">            return &quot;redirect:/access-denied&quot;;</span>
+        }
+
+<span class="fc" id="L81">        model.addAttribute(&quot;user&quot;, user);</span>
+<span class="fc" id="L82">        return &quot;user/change-password&quot;;</span>
+    }
+
+    @PostMapping(&quot;/user/change-password/{id}&quot;)
+    public String changePassword(@PathVariable(&quot;id&quot;) Integer id,
+                                 @RequestParam(&quot;oldPassword&quot;) String oldPassword,
+                                 @RequestParam(&quot;password&quot;) String newPassword,
+                                 Principal principal,
+                                 RedirectAttributes redirectAttributes) {
+
+<span class="nc" id="L92">        User user = userService.findById(id);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (!user.getUsername().equals(principal.getName())) {</span>
+<span class="nc" id="L94">            return &quot;redirect:/access-denied&quot;;</span>
+        }
+
+<span class="nc" id="L97">        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+
+        // ❌ Mauvais mot de passe actuel → erreur
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (!encoder.matches(oldPassword, user.getPassword())) {</span>
+<span class="nc" id="L101">            redirectAttributes.addFlashAttribute(&quot;error&quot;, &quot;Current password is incorrect.&quot;);</span>
+<span class="nc" id="L102">            return &quot;redirect:/user/change-password/&quot; + id;</span>
+        }
+
+        // ✅ OK → changement du mot de passe
+<span class="nc" id="L106">        user.setPassword(encoder.encode(newPassword));</span>
+<span class="nc" id="L107">        userService.update(user);</span>
+<span class="nc" id="L108">        return &quot;redirect:/user/change-password/&quot; + id + &quot;?success&quot;;</span>
+    }
+
+
+
+
+    @GetMapping(&quot;/user/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+
+<span class="nc" id="L117">        User user = userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
+
+<span class="nc" id="L119">        user.setPassword(&quot;&quot;);</span>
+<span class="nc" id="L120">        model.addAttribute(&quot;user&quot;, user);</span>
+<span class="nc" id="L121">        return &quot;user/update&quot;;</span>
+    }
+
+    @PostMapping(&quot;/user/update/{id}&quot;)
+    public String updateUser(@PathVariable(&quot;id&quot;) Integer id, @Valid User user,
+                             BindingResult result, Model model,
+                             Principal principal) {
+
+        // Empêche un USER de modifier un autre compte
+<span class="nc" id="L130">        User connectedUser = userService.findByUsername(principal.getName())</span>
+<span class="nc" id="L131">                .orElseThrow(() -&gt; new RuntimeException(&quot;User not found&quot;));</span>
+
+<span class="nc bnc" id="L133" title="All 4 branches missed.">        if (!connectedUser.getRole().equals(&quot;ROLE_ADMIN&quot;) &amp;&amp; !connectedUser.getId().equals(id)) {</span>
+<span class="nc" id="L134">            return &quot;redirect:/access-denied&quot;;</span>
+        }
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (result.hasErrors()) {</span>
+<span class="nc" id="L138">            return &quot;user/update&quot;;</span>
+        }
+
+        // Conserver les infos de l'utilisateur existant
+<span class="nc" id="L142">        User existingUser = userService.findById(id);</span>
+<span class="nc" id="L143">        user.setId(id);</span>
+
+        // On ne laisse pas le rôle être modifié dans le formulaire
+<span class="nc" id="L146">        user.setRole(existingUser.getRole());</span>
+
+        // Conserver le fullname s’il est en readonly (non modifiable)
+<span class="nc" id="L149">        user.setFullname(existingUser.getFullname());</span>
+
+        // Sécuriser le mot de passe : conserver si vide
+<span class="nc bnc" id="L152" title="All 4 branches missed.">        if (user.getPassword() == null || user.getPassword().isBlank()) {</span>
+<span class="nc" id="L153">            user.setPassword(existingUser.getPassword());</span>
+        } else {
+<span class="nc" id="L155">            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));</span>
+        }
+
+        // Sauvegarde finale
+<span class="nc" id="L159">        userRepository.save(user);</span>
+<span class="nc" id="L160">        return &quot;redirect:/user/list&quot;;</span>
+    }
+
+
+    @GetMapping(&quot;/user/delete/{id}&quot;)
+    public String deleteUser(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+
+<span class="nc" id="L167">        User user = userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
+
+<span class="nc" id="L169">        userRepository.delete(user);</span>
+
+<span class="nc" id="L171">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
+<span class="nc" id="L172">        return &quot;redirect:/user/list&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

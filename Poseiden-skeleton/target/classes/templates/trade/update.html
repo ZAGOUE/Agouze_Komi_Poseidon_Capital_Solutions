@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Update Trade</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="form-wrapper">
+
+	<!-- ✅ Titre -->
+	<h2 class="title-custom">Update Trade Screen</h2>
+
+	<!-- ✅ Sous-titre -->
+	<h4 class="section-label">Update Trade</h4>
+
+	<form th:action="@{/trade/update/{id}(id=${trade.tradeId})}" th:object="${trade}" method="post">
+
+		<!-- Account -->
+		<div class="mb-3">
+			<label for="account" class="form-label">Account</label>
+			<input type="text" th:field="*{account}" id="account" placeholder="Account" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('account')}" th:errors="*{account}"></p>
+		</div>
+
+		<!-- Type -->
+		<div class="mb-3">
+			<label for="type" class="form-label">Type</label>
+			<input type="text" th:field="*{type}" id="type" placeholder="Type" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+		</div>
+
+		<!-- Buy Quantity -->
+		<div class="mb-4">
+			<label for="buyQuantity" class="form-label">Buy Quantity</label>
+			<input type="number" th:field="*{buyQuantity}" id="buyQuantity" placeholder="Buy Quantity" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('buyQuantity')}" th:errors="*{buyQuantity}"></p>
+		</div>
+
+		<!-- ID caché -->
+		<input type="hidden" th:field="*{tradeId}" />
+
+		<!-- ✅ Boutons -->
+		<div class="d-flex gap-2">
+			<a class="btn btn-danger" href="/trade/list">Cancel</a>
+			<input class="btn btn-primary" type="submit" value="Update Trade" />
+		</div>
+	</form>
+
+	<!-- ✅ Logo -->
+	<div class="footer-logo-inside">
+		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
+	</div>
+
+</div>
+
+</body>
+</html>

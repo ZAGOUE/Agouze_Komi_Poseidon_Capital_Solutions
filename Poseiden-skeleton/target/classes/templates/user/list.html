@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="utf-8"/>
+	<title>User List</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="content-wrapper">
+
+	<!-- Titre principal -->
+	<h2 class="title-custom">User List Screen</h2>
+
+	<!-- Menu de navigation -->
+	<div class="menu-block">
+		<nav class="menu-links">
+			<a href="/bidList/list">Bid List</a>
+			<a href="/curvePoint/list">Curve Points</a>
+			<a href="/rating/list">Ratings</a>
+			<a href="/trade/list">Trade</a>
+			<a href="/ruleName/list">Rule</a>
+			<a href="/user/list">Users</a>
+		</nav>
+		<div class="user-block">
+			<p class="user-label">
+				Logged in user: <b th:text="${username}">admin</b><br/>
+
+			</p>
+			<form th:action="@{/logout}" method="POST">
+				<input type="submit" value="Logout" class="btn btn-sm btn-outline-secondary"/>
+			</form>
+		</div>
+	</div>
+
+	<!-- Titre + bouton réservé à l'admin -->
+	<div class="mb-3">
+		<h4 class="section-label">User List</h4>
+		<a href="/user/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
+	</div>
+
+	<!-- Tableau -->
+	<table class="table table-bordered table-striped text-center">
+		<thead class="table-light">
+		<tr>
+			<th>Id</th>
+			<th>Full Name</th>
+			<th>Username</th>
+			<th>Role</th>
+			<th class="text-center">Action</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="user : ${users}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.fullname}"></td>
+			<td th:text="${user.username}"></td>
+			<td th:text="${user.role}"></td>
+
+			<!-- ADMIN: actions sur tout le monde -->
+			<td sec:authorize="hasRole('ADMIN')" class="text-center">
+				<a th:href="@{/user/update/{id}(id=${user.id})}">Edit</a> |
+				<a th:href="@{/user/delete/{id}(id=${user.id})}">Delete</a>
+
+			</td>
+
+			<!-- USER: changer mot de passe -->
+			<td sec:authorize="hasRole('USER')" th:if="${user.username == #authentication.name}" class="text-center">
+				<a th:href="@{/user/change-password/{id}(id=${user.id})}" class="btn btn-sm btn-warning">Change Password</a>
+			</td>
+
+		</tr>
+		</tbody>
+	</table>
+
+	<!-- Logo -->
+	<div class="footer-logo-inside mt-4">
+		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
+	</div>
+
+</div>
+
+</body>
+</html>

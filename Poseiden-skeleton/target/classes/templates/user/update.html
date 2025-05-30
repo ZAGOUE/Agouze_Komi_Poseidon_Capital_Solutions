@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="utf-8" />
+	<title>Update User</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="form-wrapper">
+
+	<h2 class="title-custom">Update User Screen</h2>
+	<h4 class="section-label">Update User</h4>
+
+	<form th:action="@{/user/update/{id}(id=${user.id})}" th:object="${user}" method="post">
+
+		<!-- Full Name -->
+		<div class="mb-3">
+			<label for="fullname" class="form-label">Full Name</label>
+			<input type="text" th:field="*{fullname}" id="fullname" placeholder="Full Name" class="form-control" />
+			<p class="text-danger" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></p>
+		</div>
+
+		<!-- User Name -->
+		<div class="mb-3">
+			<label for="username" class="form-label">User Name</label>
+			<input type="text" th:field="*{username}" id="username" placeholder="User Name" class="form-control" />
+			<p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+		</div>
+
+		<!-- Password -->
+		<div class="mb-3">
+			<label for="password" class="form-label">Password</label>
+			<input type="password" th:field="*{password}" id="password" placeholder="Password (laisser vide si inchangé)" class="form-control" />
+			<p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+		</div>
+
+		<!-- Role -->
+		<div class="mb-4">
+			<label class="form-label d-block">Role</label>
+
+			<!-- ADMIN peut modifier -->
+			<div sec:authorize="hasRole('ADMIN')">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{role}" th:value="ROLE_ADMIN" id="roleAdmin" />
+					<label class="form-check-label" for="roleAdmin">Admin</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" th:field="*{role}" th:value="ROLE_USER" id="roleUser" />
+					<label class="form-check-label" for="roleUser">User</label>
+				</div>
+			</div>
+
+			<!-- USER : champ caché -->
+			<div sec:authorize="hasRole('USER')">
+				<input type="hidden" th:field="*{role}" />
+			</div>
+		</div>
+
+		<!-- ID caché -->
+		<input type="hidden" th:field="*{id}" />
+
+		<!-- Boutons -->
+		<div class="d-flex gap-2">
+			<a class="btn btn-danger" href="/user/list">Cancel</a>
+			<input class="btn btn-primary" type="submit" value="Update User" />
+		</div>
+
+		<!-- Affichage global si erreurs -->
+		<p class="text-danger mt-3" th:if="${#fields.hasErrors()}">Des erreurs ont été détectées dans le formulaire.</p>
+
+	</form>
+
+	<div class="footer-logo-inside mt-3">
+		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
+	</div>
+
+</div>
+
+</body>
+</html>

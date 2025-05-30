@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="utf-8"/>
+	<title>Curve Point List</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<!-- Bloc formulaire -->
+<div class="content-wrapper">
+
+	<!-- ✅ Titre centré -->
+	<h2 class="title-custom">Curve Point List</h2>
+
+	<!-- ✅ Menu + utilisateur + logout -->
+	<div class="row justify-content-between align-items-start mb-3">
+		<div class="col-md-12">
+			<nav class="menu-links">
+				<a href="/bidList/list">Bid List</a>
+				<a href="/curvePoint/list">Curve Points</a>
+				<a href="/rating/list">Ratings</a>
+				<a href="/trade/list">Trade</a>
+				<a href="/ruleName/list">Rule</a>
+				<a href="/user/list">Users</a>
+			</nav>
+			<div class="user-block">
+				<p class="user-label">
+					Logged in user: <b th:text="${username}">admin</b><br/>
+
+				</p>
+				<form th:action="@{/logout}" method="POST">
+					<input type="submit" value="Logout" class="btn btn-sm btn-outline-secondary"/>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- ✅ Titre + bouton d'ajout visible seulement pour ADMIN -->
+	<div class="mb-3">
+		<h4 class="section-label">Curve Point List</h4>
+		<a href="/curvePoint/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
+	</div>
+
+	<!-- ✅ Tableau -->
+	<table class="table table-bordered table-striped text-center">
+		<thead class="table-light">
+		<tr>
+			<th>Id</th>
+			<th>Curve Id</th>
+			<th>Term</th>
+			<th>Value</th>
+			<th sec:authorize="hasRole('ADMIN')">Action</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="curvePoint : ${curvePoints}">
+			<td th:text="${curvePoint.id}"></td>
+			<td th:text="${curvePoint.curveId}"></td>
+			<td th:text="${curvePoint.term}"></td>
+			<td th:text="${curvePoint.value}"></td>
+			<td class="text-right action-links" sec:authorize="hasRole('ADMIN')">
+				<a th:href="@{/curvePoint/update/{id}(id=${curvePoint.id})}">Edit</a> |
+				<a th:href="@{/curvePoint/delete/{id}(id=${curvePoint.id})}">Delete</a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+
+	<!-- Logo Poseidon -->
+	<div class="footer-logo-inside">
+		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
+	</div>
+
+</div>
+</body>
+</html>

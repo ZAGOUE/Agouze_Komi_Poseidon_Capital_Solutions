@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Update Curve Point</title>
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="form-wrapper">
+
+	<!-- ✅ Titre -->
+	<h2 class="title-custom">Update Curve Point Screen</h2>
+
+	<!-- ✅ Sous-titre -->
+	<h4 class="section-label">Update Curve Point</h4>
+
+	<form th:action="@{/curvePoint/update/{id}(id=${curvePoint.id})}" th:object="${curvePoint}" method="post">
+
+		<!-- Curve Id -->
+		<div class="mb-3">
+			<label for="curveId" class="form-label">Curve Id</label>
+			<input type="number" th:field="*{curveId}" id="curveId" placeholder="Curve Id" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('curveId')}" th:errors="*{curveId}"></p>
+		</div>
+
+		<!-- Term -->
+		<div class="mb-3">
+			<label for="term" class="form-label">Term</label>
+			<input type="text" th:field="*{term}" id="term" placeholder="Term" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('term')}" th:errors="*{term}"></p>
+		</div>
+
+		<!-- Value -->
+		<div class="mb-4">
+			<label for="value" class="form-label">Value</label>
+			<input type="number" th:field="*{value}" id="value" placeholder="Value" class="form-control">
+			<p class="text-danger" th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></p>
+		</div>
+
+		<!-- ID caché -->
+		<input type="hidden" th:field="*{id}" />
+
+		<!-- ✅ Boutons -->
+		<div class="d-flex gap-2">
+			<a class="btn btn-danger" href="/curvePoint/list">Cancel</a>
+			<input class="btn btn-primary" type="submit" value="Update Curve Point" />
+		</div>
+	</form>
+
+	<!-- ✅ Logo -->
+	<div class="footer-logo-inside">
+		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
+	</div>
+
+</div>
+
+</body>
+</html>

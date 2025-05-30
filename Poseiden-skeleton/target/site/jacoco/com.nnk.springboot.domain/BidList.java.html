@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BidList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.domain</a> &gt; <span class="el_source">BidList.java</span></div><h1>BidList.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.domain;
+
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.sql.Timestamp;
+
+@Entity
+@Table(name = &quot;bidlist&quot;)
+<span class="pc bpc" id="L12" title="181 of 182 branches missed.">@Data</span>
+public class BidList {
+    // TODO: Map columns in data table BIDLIST with corresponding java fields
+
+    @Id
+    @Column(name = &quot;BidListId&quot;)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L19">    private Integer bidListId;</span>
+
+    @NotBlank(message = &quot;Account is mandatory&quot;)
+<span class="fc" id="L22">    private String account;</span>
+
+    @NotBlank(message = &quot;Type is mandatory&quot;)
+<span class="fc" id="L25">    private String type;</span>
+
+    @Positive(message = &quot;Bid quantity must be positive&quot;)
+    @NotNull(message = &quot;Bid quantity is mandatory&quot;)
+<span class="fc" id="L29">    private Double bidQuantity;</span>
+
+<span class="fc" id="L31">    private Double askQuantity;</span>
+<span class="fc" id="L32">    private Double bid;</span>
+<span class="fc" id="L33">    private Double ask;</span>
+<span class="fc" id="L34">    private String benchmark;</span>
+<span class="fc" id="L35">    private Timestamp bidListDate;</span>
+<span class="fc" id="L36">    private String commentary;</span>
+<span class="fc" id="L37">    private String security;</span>
+<span class="fc" id="L38">    private String status;</span>
+<span class="fc" id="L39">    private String trader;</span>
+<span class="fc" id="L40">    private String book;</span>
+<span class="fc" id="L41">    private String creationName;</span>
+<span class="fc" id="L42">    private Timestamp creationDate;</span>
+<span class="fc" id="L43">    private String revisionName;</span>
+<span class="fc" id="L44">    private Timestamp revisionDate;</span>
+<span class="fc" id="L45">    private String dealName;</span>
+<span class="fc" id="L46">    private String dealType;</span>
+<span class="fc" id="L47">    private String sourceListId;</span>
+<span class="fc" id="L48">    private String side;</span>
+
+<span class="fc" id="L50">    public BidList(String account, String type, Double bidQuantity) {</span>
+<span class="fc" id="L51">        this.account = account;</span>
+<span class="fc" id="L52">        this.type = type;</span>
+<span class="fc" id="L53">        this.bidQuantity = bidQuantity;</span>
+<span class="fc" id="L54">    }</span>
+
+<span class="fc" id="L56">    public BidList() {</span>
+<span class="fc" id="L57">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

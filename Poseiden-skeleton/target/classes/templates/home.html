@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Accueil - Poseidon</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="home-page">
+<div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
+    <!-- Logo -->
+    <img th:src="@{/img/img_poseidon.png}" alt="Logo Poseidon" class="img-fluid mb-4" style="max-width: 300px;"/>
+
+    <h1 class="mb-3">Poseidon Capital Solutions</h1>
+    <p class="lead">Bienvenue sur l'outil de gestion financière de vos entités.</p>
+
+    <div class="button-group">
+        <a href="/login">Login</a> or create one <a href="/user/add">User management</a>
+
+    </div>
+</div>
+</body>
+</html>

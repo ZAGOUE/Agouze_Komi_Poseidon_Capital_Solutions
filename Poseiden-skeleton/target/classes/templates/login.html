@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Screen</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+<div class="login-container">
+    <h2 class="login-title text-center">Login Screen</h2>
+
+    <form th:action="@{/login}" method="post" class="login-form text-start">
+        <p class="login-subtitle">Login with Username and Password</p>
+
+        <div class="mb-3">
+            <label for="username">User:</label><br>
+            <input type="text" id="username" name="username" class="form-control w-100" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" class="form-control w-100" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-light border">Login</button>
+        </div>
+
+        <p th:if="${param.error}" class="text-danger">❌ Invalid username or password</p>
+        <p th:if="${param.logout}" class="text-success">✅ You have been logged out</p>
+    </form>
+
+    <div class="login-logo text-end mt-4">
+        <img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" />
+    </div>
+</div>
+</body>
+</html>
