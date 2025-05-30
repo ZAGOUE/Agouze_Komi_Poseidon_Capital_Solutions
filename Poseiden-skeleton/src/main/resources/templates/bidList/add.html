@@ -11,10 +11,10 @@
 
 <div class="form-wrapper">
 
-	<!-- ✅ Titre principal -->
+
 	<h2 class="title-custom">Add Bid Screen</h2>
 
-	<!-- ✅ Sous-titre -->
+
 	<h4 class="section-label">Add New Bid</h4>
 
 	<form action="#" th:action="@{/bidList/validate}" th:object="${bidList}" method="post">
@@ -40,7 +40,7 @@
 			<p class="text-danger" th:if="${#fields.hasErrors('bidQuantity')}" th:errors="*{bidQuantity}"></p>
 		</div>
 
-		<!-- ✅ Boutons -->
+		<!-- Boutons -->
 		<div class="d-flex gap-2">
 			<a class="btn btn-danger" href="/bidList/list">Cancel</a>
 			<input class="btn btn-primary" type="submit" value="Add BidList" />

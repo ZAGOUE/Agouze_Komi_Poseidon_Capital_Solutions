@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+
+/**
+ * Controller handling login and secured pages.
+ */
 @Controller
 
 public class LoginController {
@@ -14,6 +18,11 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Handles requests to the login page.
+     *
+     * @return a ModelAndView object pointing to the "login" view
+     */
     @GetMapping("login")
     public ModelAndView login() {
         ModelAndView mav = new ModelAndView();
@@ -21,6 +30,12 @@ public class LoginController {
         return mav;
     }
 
+    /**
+     * Displays a list of all users in a secure section.
+     * This endpoint requires the user to be authenticated.
+     *
+     * @return a ModelAndView with the list of users and the "user/list" view
+     */
     @GetMapping("secure/article-details")
     public ModelAndView getAllUserArticles() {
         ModelAndView mav = new ModelAndView();
@@ -29,6 +44,11 @@ public class LoginController {
         return mav;
     }
 
+    /**
+     * Handles access-denied errors.
+     *
+     * @return a ModelAndView for the "403" error view with a custom message
+     */
     @GetMapping("error")
     public ModelAndView error() {
         ModelAndView mav = new ModelAndView();

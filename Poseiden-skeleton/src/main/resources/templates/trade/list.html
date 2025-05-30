@@ -10,13 +10,13 @@
 </head>
 <body>
 
-<!-- Bloc principal -->
+
 <div class="content-wrapper">
 
-	<!-- ✅ Titre centré -->
+
 	<h2 class="title-custom">Trade List Screen</h2>
 
-	<!-- ✅ Menu + utilisateur -->
+	<!-- Menu + utilisateur -->
 	<div class="menu-block">
 		<nav class="menu-links">
 			<a href="/bidList/list">Bid List</a>
@@ -37,13 +37,13 @@
 		</div>
 	</div>
 
-	<!-- ✅ Section + bouton réservé aux ADMIN -->
+	<!-- Section + bouton réservé aux ADMIN -->
 	<div class="mb-3">
 		<h4 class="section-label">Trade List</h4>
 		<a href="/trade/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
 	</div>
 
-	<!-- ✅ Tableau stylisé -->
+	<!-- Tableau stylisé -->
 	<table class="table table-bordered table-striped text-center">
 		<thead class="table-light">
 		<tr>
@@ -68,7 +68,7 @@
 		</tbody>
 	</table>
 
-	<!-- ✅ Logo Poseidon -->
+	<!-- Logo Poseidon -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>

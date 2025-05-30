@@ -12,10 +12,10 @@
 
 <div class="content-wrapper">
 
-	<!-- ✅ Titre -->
+
 	<h2 class="title-custom">Rating List Screen</h2>
 
-	<!-- ✅ Menu + utilisateur -->
+	<!-- Menu + utilisateur -->
 	<div class="menu-block">
 		<nav class="menu-links">
 			<a href="/bidList/list">Bid List</a>
@@ -36,13 +36,13 @@
 		</div>
 	</div>
 
-	<!-- ✅ Section + bouton (réservé ADMIN) -->
+	<!-- Section + bouton (réservé ADMIN) -->
 	<div class="mb-3">
 		<h4 class="section-label">Rating List</h4>
 		<a href="/rating/add" class="btn btn-primary btn-sm" sec:authorize="hasRole('ADMIN')">Add New</a>
 	</div>
 
-	<!-- ✅ Tableau -->
+	<!-- Tableau -->
 	<table class="table table-bordered table-striped text-center">
 		<thead class="table-light">
 		<tr>
@@ -69,7 +69,7 @@
 		</tbody>
 	</table>
 
-	<!-- ✅ Logo -->
+	<!-- Logo -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>

@@ -96,19 +96,17 @@ public class UserController {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // ❌ Mauvais mot de passe actuel → erreur
+        // Mauvais mot de passe actuel → erreur
         if (!encoder.matches(oldPassword, user.getPassword())) {
             redirectAttributes.addFlashAttribute("error", "Current password is incorrect.");
             return "redirect:/user/change-password/" + id;
         }
 
-        // ✅ OK → changement du mot de passe
+        // OK → changement du mot de passe
         user.setPassword(encoder.encode(newPassword));
         userService.update(user);
         return "redirect:/user/change-password/" + id + "?success";
     }
-
-
 
 
     @GetMapping("/user/update/{id}")
@@ -122,11 +120,13 @@ public class UserController {
     }
 
     @PostMapping("/user/update/{id}")
-    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
-                             BindingResult result, Model model,
+    public String updateUser(@PathVariable("id") Integer id,
+                             @Valid User user,
+                             BindingResult result,
+                             Model model,
                              Principal principal) {
 
-        // Empêche un USER de modifier un autre compte
+        // Sécurité : Seul l'utilisateur lui-même  peut modifier
         User connectedUser = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -134,31 +134,32 @@ public class UserController {
             return "redirect:/access-denied";
         }
 
+        // 🔁 Validation du formulaire
         if (result.hasErrors()) {
+            System.out.println("❌ Erreurs de validation : " + result);
             return "user/update";
         }
 
-        // Conserver les infos de l'utilisateur existant
+        // Récupération des données existantes
         User existingUser = userService.findById(id);
-        user.setId(id);
 
-        // On ne laisse pas le rôle être modifié dans le formulaire
-        user.setRole(existingUser.getRole());
-
-        // Conserver le fullname s’il est en readonly (non modifiable)
-        user.setFullname(existingUser.getFullname());
-
-        // Sécuriser le mot de passe : conserver si vide
+        // 🛡️ Si mot de passe vide → on garde l'ancien
         if (user.getPassword() == null || user.getPassword().isBlank()) {
             user.setPassword(existingUser.getPassword());
         } else {
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         }
 
-        // Sauvegarde finale
+        // S'assurer que l'ID est bien mis (au cas où il manquerait dans le form)
+        user.setId(id);
+
+        // Mise à jour en base
         userRepository.save(user);
+
+        // Redirection vers la liste
         return "redirect:/user/list";
     }
+
 
 
     @GetMapping("/user/delete/{id}")

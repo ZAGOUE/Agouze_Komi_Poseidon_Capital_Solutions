@@ -17,12 +17,12 @@ import java.security.Principal;
 
 @Controller
 public class CurveController {
-    // TODO: Inject Curve Point service
+
     @Autowired
     private CurvePointRepository curvePointRepository;
 
     @RequestMapping("/curvePoint/list")
-    // TODO: find all Curve Point, add to model
+
     public String home(Model model, Principal principal) {
         model.addAttribute("username", principal != null ? principal.getName() : "anonymous");
         model.addAttribute("curvePoints", curvePointRepository.findAll());
@@ -36,7 +36,7 @@ public class CurveController {
 
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
+
         if (result.hasErrors()) {
             return "curvePoint/add";
         }
@@ -46,7 +46,7 @@ public class CurveController {
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get CurvePoint by Id and to model then show to the form
+
         CurvePoint curvePoint = curvePointRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
         model.addAttribute("curvePoint", curvePoint);
@@ -56,7 +56,7 @@ public class CurveController {
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
+
         if (result.hasErrors()) {
             return "curvePoint/update";
         }
@@ -67,7 +67,7 @@ public class CurveController {
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
+
         CurvePoint curvePoint = curvePointRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
         curvePointRepository.delete(curvePoint);

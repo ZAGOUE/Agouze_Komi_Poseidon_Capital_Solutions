@@ -11,10 +11,10 @@
 
 <div class="form-wrapper">
 
-	<!-- ✅ Titre -->
+
 	<h2 class="title-custom">Update Rule Screen</h2>
 
-	<!-- ✅ Sous-titre -->
+
 	<h4 class="section-label">Update Rule</h4>
 
 	<form th:action="@{/ruleName/update/{id}(id=${ruleName.id})}" th:object="${ruleName}" method="post">
@@ -64,14 +64,14 @@
 		<!-- ID caché -->
 		<input type="hidden" th:field="*{id}" />
 
-		<!-- ✅ Boutons -->
+		<!-- Boutons -->
 		<div class="d-flex gap-2">
 			<a class="btn btn-danger" href="/ruleName/list">Cancel</a>
 			<input class="btn btn-primary" type="submit" value="Update Rule" />
 		</div>
 	</form>
 
-	<!-- ✅ Logo -->
+	<!-- Logo -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>

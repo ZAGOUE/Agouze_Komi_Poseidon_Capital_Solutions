@@ -9,7 +9,7 @@ public class HomeController {
 
 	@RequestMapping("/")
 	public String root() {
-		return "redirect:/home"; // redirige vers /home après connexion ou accès racine
+		return "redirect:/home";
 	}
 
 	@RequestMapping("/home")
@@ -26,6 +26,6 @@ public class HomeController {
 				return "redirect:/bidList/list";
 			}
 		}
-		return "home"; // fallback
+		return "home";
 	}
 }

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * Controller for user authentication operations.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class AuthController {
@@ -23,7 +26,14 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers a new user.
+     *
+     * @param user The user to register.
+     * @return A response indicating success or failure.
+     */
     @PostMapping("/register")
+
     public ResponseEntity<?> register(@RequestBody User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity

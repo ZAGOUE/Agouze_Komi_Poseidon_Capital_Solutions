@@ -17,12 +17,12 @@ import java.security.Principal;
 
 @Controller
 public class RuleNameController {
-    // TODO: Inject RuleName service
+
     @Autowired
     private RuleNameRepository ruleNameRepository;
 
     @RequestMapping("/ruleName/list")
-    // TODO: find all RuleName, add to model
+
     public String home(Model model, Principal principal) {
         model.addAttribute("username", principal != null ? principal.getName() : "anonymous");
         model.addAttribute("ruleNames", ruleNameRepository.findAll());
@@ -36,7 +36,7 @@ public class RuleNameController {
 
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
+
         if (result.hasErrors()) {
             return "ruleName/add";
         }
@@ -46,7 +46,7 @@ public class RuleNameController {
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
+
         RuleName ruleName = ruleNameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RuleName Id:" + id));
         model.addAttribute("ruleName", ruleName);
@@ -56,7 +56,7 @@ public class RuleNameController {
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                                  BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
+
         if (result.hasErrors()) {
             return "ruleName/update";
         }
@@ -67,7 +67,7 @@ public class RuleNameController {
 
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find RuleName by Id and delete the RuleName, return to RuleName list
+
         RuleName ruleName = ruleNameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RuleName Id:" + id));
         ruleNameRepository.delete(ruleName);

@@ -11,10 +11,10 @@
 
 <div class="form-wrapper">
 
-	<!-- ✅ Titre -->
+
 	<h2 class="title-custom">Add User Screen</h2>
 
-	<!-- ✅ Sous-titre -->
+
 	<h4 class="section-label">Add New User</h4>
 
 	<form th:action="@{/user/validate}" th:object="${user}" method="post">
@@ -44,7 +44,7 @@
 		<div class="mb-4">
 			<label class="form-label d-block">Role</label>
 
-			<!-- ✅ Choix visible uniquement pour ROLE_ADMIN -->
+			<!-- Choix visible uniquement pour ROLE_ADMIN -->
 			<div sec:authorize="hasRole('ADMIN')">
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" th:field="*{role}" th:value="ROLE_ADMIN" id="roleAdmin">
@@ -56,25 +56,25 @@
 				</div>
 			</div>
 
-			<!-- ✅ Utilisateur simple ou non connecté → rôle forcé -->
+			<!-- Utilisateur simple ou non connecté → rôle forcé -->
 			<div sec:authorize="!hasRole('ADMIN')">
 				<input type="hidden" th:field="*{role}" value="ROLE_USER" />
 				<p class="text-muted"><em>Rôle attribué : Utilisateur standard</em></p>
 			</div>
 
-			<!-- ✅ Message d’erreur -->
+			<!-- Message d’erreur -->
 			<p class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></p>
 		</div>
 
 
-		<!-- ✅ Boutons -->
+		<!-- Boutons -->
 		<div class="d-flex gap-2">
 			<a class="btn btn-danger" href="/user/list">Cancel</a>
 			<input class="btn btn-primary" type="submit" value="Add User" />
 		</div>
 	</form>
 
-	<!-- ✅ Logo -->
+	<!-- Logo -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>

@@ -11,10 +11,10 @@
 
 <div class="form-wrapper">
 
-	<!-- ✅ Titre -->
+
 	<h2 class="title-custom">Update Curve Point Screen</h2>
 
-	<!-- ✅ Sous-titre -->
+
 	<h4 class="section-label">Update Curve Point</h4>
 
 	<form th:action="@{/curvePoint/update/{id}(id=${curvePoint.id})}" th:object="${curvePoint}" method="post">
@@ -43,14 +43,14 @@
 		<!-- ID caché -->
 		<input type="hidden" th:field="*{id}" />
 
-		<!-- ✅ Boutons -->
+		<!-- Boutons -->
 		<div class="d-flex gap-2">
 			<a class="btn btn-danger" href="/curvePoint/list">Cancel</a>
 			<input class="btn btn-primary" type="submit" value="Update Curve Point" />
 		</div>
 	</form>
 
-	<!-- ✅ Logo -->
+	<!-- Logo -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>

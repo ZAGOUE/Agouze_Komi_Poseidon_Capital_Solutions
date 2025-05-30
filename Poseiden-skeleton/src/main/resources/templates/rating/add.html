@@ -11,10 +11,10 @@
 
 <div class="form-wrapper">
 
-	<!-- ✅ Titre -->
+
 	<h2 class="title-custom">Add Rating Screen</h2>
 
-	<!-- ✅ Sous-titre -->
+
 	<h4 class="section-label">Add New Rating</h4>
 
 	<form th:action="@{/rating/validate}" th:object="${rating}" method="post">
@@ -47,14 +47,14 @@
 			<p class="text-danger" th:if="${#fields.hasErrors('orderNumber')}" th:errors="*{orderNumber}"></p>
 		</div>
 
-		<!-- ✅ Boutons -->
+		<!-- Boutons -->
 		<div class="d-flex gap-2">
 			<a class="btn btn-danger" href="/rating/list">Cancel</a>
 			<input class="btn btn-primary" type="submit" value="Add Rating"/>
 		</div>
 	</form>
 
-	<!-- ✅ Logo -->
+	<!-- Logo -->
 	<div class="footer-logo-inside">
 		<img th:src="@{/img/logo_poseidon.png}" alt="Poseidon Capital Solutions" style="height: 50px;" />
 	</div>
